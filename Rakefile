@@ -3,6 +3,7 @@
 require 'rubocop/rake_task'
 
 task :run do
+  ENV['RUBYOPT'] = '-W0'
   ruby 'src/main.rb'
 end
 
