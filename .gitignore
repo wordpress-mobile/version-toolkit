@@ -1,0 +1,17 @@
+.DS_Store
+
+# JetBrains IDE files
+.idea
+
+# Ruby / Bundler
+vendor/bundle
+
+# Testing
+test_results/
+coverage/
+
+# YARD Documentation
+yard-doc/
+
+# Build Products
+*.gem
