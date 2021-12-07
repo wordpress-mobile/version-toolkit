@@ -4,7 +4,7 @@ require 'rubocop/rake_task'
 
 task :run do
   ENV['RUBYOPT'] = '-W0'
-  ruby 'src/main.rb'
+  ruby 'bin/main.rb'
 end
 
 RuboCop::RakeTask.new
