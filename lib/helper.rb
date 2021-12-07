@@ -22,4 +22,12 @@ class Helper
     branches = @client.branches(@repo)
     return branches.map { |branch| branch.name }
   end
+
+  def create_branch(sha)
+    @client.create_ref(@repo, "heads/created_from_helper", sha)
+  end
+
+  def default_branch_sha()
+    return @client.ref(@repo, "heads/trunk").object.sha
+  end
 end
