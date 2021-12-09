@@ -43,6 +43,10 @@ class GithubRepository
     @client.create_ref(@repo, "heads/#{branch_name}", sha) unless branch_exists?(branch_name)
   end
 
+  def create_branch_from_default_branch(branch_name)
+    create_branch(branch_name, branch_sha(default_branch()))
+  end
+
   def default_branch()
     return @client.repository(@repo).default_branch
   end
