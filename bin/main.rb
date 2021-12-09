@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'octokit'
-require_relative '../lib/Helper.rb'
+require_relative '../lib/Helper'
 
 test_repository = 'oguzkocer/version-test-bin'
 test_label = 'bug'
@@ -11,8 +11,7 @@ client.auto_paginate = true
 
 test_repo_helper = Helper.new(client, test_repository)
 
-#puts test_repo_helper.get_branch_names()
-#puts test_repo_helper.pull_requests_with_label(test_label)
-
-#sha = test_repo_helper.default_branch_sha()
-#test_repo_helper.create_branch(sha)
+test_repo_helper.create_submodule_hash_update_commit('heads/created_from_helper',
+                                                     'gutenberg',
+                                                     'fc8a7891f900aa67a859b28f01aeb4e24fbf9011',
+                                                     'Update gutenberg submodule hash')
