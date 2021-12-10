@@ -23,25 +23,27 @@ class SubmoduleUpdateFlow
 
   # Find client PRs that no longer has an associated submodule PR and close them unless there are other changes
   def close_outdated_pull_requests
-    candidate_prs_to_close = automated_clients_prs.filter do |branch_name, _|
+    puts "Closing #{prs_to_close.length} pull request(s) that no longer has an associated submodule pull request.."
+
+    prs_to_close.each { |_, pr| @client_repo.close_pull_request(pr.number) }
+  end
+
+  private
+
+  def candidate_prs_to_close
+    automated_clients_prs.filter do |branch_name, _|
       !submodule_prs_to_downstream.key?(branch_name)
     end
+  end
 
-    puts 'Closing pull request(s) that no longer has an associated submodule pull request..'
-
-    # If there are changes by other developers, don't close the PR
-    prs_to_close = candidate_prs_to_close.filter do |_, pr|
+  # If there are changes by other developers, don't close the PR
+  def prs_to_close
+    candidate_prs_to_close.filter do |_, pr|
       has_other_commits = @client_repo.pull_commits(pr.number).any? do |commit|
         commit.author.login != 'wpversionupdatebot'
       end
       puts "PR ##{pr.number} has commits by other developers, skipping.." if has_other_commits
       !has_other_commits
-    end
-
-    puts "Closing #{prs_to_close.length} pull requests.."
-
-    prs_to_close.each do |_, pr|
-      @client_repo.close_pull_request(pr.number)
     end
   end
 
