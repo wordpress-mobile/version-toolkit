@@ -16,9 +16,9 @@ class SubmoduleUpdateFlow
 
   def sync
     # close_outdated_pull_requests
-    create_client_branches()
-    update_client_branches_with_new_submodule_hash()
-    open_pull_requests()
+    create_client_branches
+    update_client_branches_with_new_submodule_hash
+    open_pull_requests
   end
 
   # Find client PRs that no longer has an associated submodule PR and close them unless there are other changes
@@ -83,7 +83,7 @@ class SubmoduleUpdateFlow
       end
     end
     puts "Found #{prs.length} #{@submodule_repository_name} pull requests to automate"
-    return prs.to_h { |pr| [client_branch_name_for_submodule_pr(pr), pr] }
+    prs.to_h { |pr| [client_branch_name_for_submodule_pr(pr), pr] }
   end
 
   # Fetches client PRs and filters it to find the ones that are automated
@@ -93,7 +93,7 @@ class SubmoduleUpdateFlow
       pr.head.ref.start_with?(branch_name_prefix)
     end
     puts "Found #{prs.length} pull requests automated by us"
-    return prs.to_h { |pr| [pr.head.ref, pr] }
+    prs.to_h { |pr| [pr.head.ref, pr] }
   end
 
   def client_branch_name_for_submodule_pr(submodule_pr)
@@ -101,7 +101,7 @@ class SubmoduleUpdateFlow
   end
 
   def branch_name_prefix
-    return "#{GLOBAL_BRANCH_NAME_PREFIX}/#{@submodule_path}"
+    "#{GLOBAL_BRANCH_NAME_PREFIX}/#{@submodule_path}"
   end
 
   def new_pull_request_body(submodule_pr_url)
