@@ -11,6 +11,8 @@ client.auto_paginate = true
 
 repo = GithubRepository.new(client, test_repository)
 
+#puts repo.submodule_commit_hash('trunk', 'gutenberg')
+
 #repo.create_submodule_hash_update_commit('created_from_helper',
 #                                                     'gutenberg',
 #                                                     'fc8a7891f900aa67a859b28f01aeb4e24fbf9011',

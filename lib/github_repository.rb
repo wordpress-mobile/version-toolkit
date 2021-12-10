@@ -14,13 +14,8 @@ class GithubRepository
     @repo = repo
   end
 
-  def pull_requests_with_label(label_name)
-    pull_requests = @client.pull_requests(@repo).filter do |pr|
-      pr.labels.any? do |label|
-        label.name == label_name
-      end
-    end
-    return pull_requests
+  def open_pull_requests()
+    return @client.pull_requests(@repo, :state => 'open')
   end
 
   def branch_names()
@@ -77,5 +72,9 @@ class GithubRepository
       :base_tree => base_tree,
     )
     return tree.sha
+  end
+
+  def submodule_commit_hash(branch_name, submodule_path)
+    return @client.contents(@repo, :path => submodule_path, :ref => branch_name).sha
   end
 end
