@@ -23,7 +23,7 @@ class SubmoduleUpdateFlow
 
   # Find client PRs that no longer has an associated submodule PR and close them unless there are other changes
   def close_outdated_pull_requests
-    puts 'Closing pull requests that no longer has an associated submodule pull request...'
+    puts 'Closing pull requests that no longer has an associated submodule pull request..'
     automated_clients_prs.filter do |branch_name, _|
       submodule_prs_to_downstream.key?(branch_name)
     end
@@ -31,7 +31,7 @@ class SubmoduleUpdateFlow
 
   # Creates a submodule hash update commit for client branches
   def update_client_branches_with_new_submodule_hash
-    puts 'Creating commits for each submodule PR...'
+    puts 'Creating commits for each submodule PR..'
     submodule_prs_to_downstream.each do |client_branch_name, submodule_pr|
       submodule_pr_commit_hash = submodule_pr.head.sha
       # Already has the correct commit hash
@@ -47,10 +47,10 @@ class SubmoduleUpdateFlow
 
   # Opens a client PR if there isn't already an associated PR
   def open_pull_requests
-    puts 'Opening pull requests...'
     prs = submodule_prs_to_downstream.filter do |branch_name, _|
       !automated_clients_prs.key?(branch_name)
     end
+    puts "Opening #{prs.length} pull requests.."
     prs.each do |branch_name, submodule_pr|
       @client_repo.create_pull_request(branch_name,
                                        submodule_pr.title,
@@ -76,19 +76,19 @@ class SubmoduleUpdateFlow
 
   # Fetches submodule PRs and filters it to find the ones to be downstreamed
   def fetch_submodule_prs_to_downstream
-    puts "Fetching #{SUBMODULE_REPOSITORY_NAME} pull requests..."
+    puts "Fetching #{@submodule_repository_name} pull requests.."
     prs = @submodule_repo.open_pull_requests.filter do |pr|
       !pr.fork && pr.labels.any? do |label|
-        label.name == FILTER_LABEL
+        label.name == @filter_label
       end
     end
-    puts "Found #{prs.length} #{SUBMODULE_REPOSITORY_NAME} pull requests to automate"
+    puts "Found #{prs.length} #{@submodule_repository_name} pull requests to automate"
     return prs.to_h { |pr| [client_branch_name_for_submodule_pr(pr), pr] }
   end
 
   # Fetches client PRs and filters it to find the ones that are automated
   def fetch_automated_clients_prs
-    puts "Fetching #{CLIENT_REPOSITORY_NAME} pull requests..."
+    puts "Fetching #{@client_repository_name} pull requests..."
     prs = @client_repo.open_pull_requests.filter do |pr|
       pr.head.ref.start_with?(branch_name_prefix)
     end
