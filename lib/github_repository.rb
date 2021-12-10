@@ -77,4 +77,9 @@ class GithubRepository
   def submodule_commit_hash(branch_name, submodule_path)
     return @client.contents(@repo, :path => submodule_path, :ref => branch_name).sha
   end
+
+  def create_pull_request(head_branch, title, body)
+    base_branch = default_branch()
+    @client.create_pull_request(@repo, base_branch, head_branch, title, body)
+  end
 end

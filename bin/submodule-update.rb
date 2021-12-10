@@ -7,7 +7,8 @@ BRANCH_NAME_PREFIX = 'version-toolkit'
 SUBMODULE_REPOSITORY_NAME = 'wordpress/gutenberg'
 SUBMODULE_PATH = 'gutenberg'
 CLIENT_REPOSITORY_NAME = 'oguzkocer/version-test-bin'
-FILTER_LABEL = 'Mobile App - i.e. Android or iOS'
+#FILTER_LABEL = 'Mobile App - i.e. Android or iOS'
+FILTER_LABEL = '[Block] Table'
 
 def client_branch_name_for_submodule_pr(submodule_pr)
   "#{BRANCH_NAME_PREFIX}/#{SUBMODULE_PATH}/#{submodule_pr.head.ref}"
@@ -67,4 +68,6 @@ end
 
 # 5. Open pull requests
 # For every branch in BRANCH_NAMES_TO_DOWNSTREAM, but not in CLIENT_DOWNSTREAMED_BRANCH_NAMES, create a new pull request
-
+(branch_names_to_downstream - client_downstreamed_branch_names).each do |branch_name|
+  client_repo.create_pull_request(branch_name, 'title', 'body')
+end
