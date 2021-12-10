@@ -82,4 +82,8 @@ class GithubRepository
     base_branch = default_branch()
     @client.create_pull_request(@repo, base_branch, head_branch, title, body)
   end
+
+  def close_pull_request(number)
+    @client.close_pull_request(@repo, number)
+  end
 end
