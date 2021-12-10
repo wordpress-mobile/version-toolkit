@@ -15,7 +15,7 @@ class SubmoduleUpdateFlow
   end
 
   def sync
-    # close_outdated_pull_requests
+    close_outdated_pull_requests
     create_client_branches
     update_client_branches_with_new_submodule_hash
     open_pull_requests
@@ -23,9 +23,25 @@ class SubmoduleUpdateFlow
 
   # Find client PRs that no longer has an associated submodule PR and close them unless there are other changes
   def close_outdated_pull_requests
-    puts 'Closing pull requests that no longer has an associated submodule pull request..'
-    automated_clients_prs.filter do |branch_name, _|
-      submodule_prs_to_downstream.key?(branch_name)
+    candidate_prs_to_close = automated_clients_prs.filter do |branch_name, _|
+      !submodule_prs_to_downstream.key?(branch_name)
+    end
+
+    puts 'Closing pull request(s) that no longer has an associated submodule pull request..'
+
+    # If there are changes by other developers, don't close the PR
+    prs_to_close = candidate_prs_to_close.filter do |_, pr|
+      has_other_commits = @client_repo.pull_commits(pr.number).any? do |commit|
+        commit.author.login != 'wpversionupdatebot'
+      end
+      puts "PR ##{pr.number} has commits by other developers, skipping.." if has_other_commits
+      !has_other_commits
+    end
+
+    puts "Closing #{prs_to_close.length} pull requests.."
+
+    prs_to_close.each do |_, pr|
+      @client_repo.close_pull_request(pr.number)
     end
   end
 
@@ -50,7 +66,7 @@ class SubmoduleUpdateFlow
     prs = submodule_prs_to_downstream.filter do |branch_name, _|
       !automated_clients_prs.key?(branch_name)
     end
-    puts "Opening #{prs.length} pull requests.."
+    puts "Opening #{prs.length} pull request(s).."
     prs.each do |branch_name, submodule_pr|
       @client_repo.create_pull_request(branch_name,
                                        submodule_pr.title,
@@ -82,7 +98,7 @@ class SubmoduleUpdateFlow
         label.name == @filter_label
       end
     end
-    puts "Found #{prs.length} #{@submodule_repository_name} pull requests to automate"
+    puts "Found #{prs.length} #{@submodule_repository_name} pull request(s) to automate"
     prs.to_h { |pr| [client_branch_name_for_submodule_pr(pr), pr] }
   end
 
@@ -92,7 +108,7 @@ class SubmoduleUpdateFlow
     prs = @client_repo.open_pull_requests.filter do |pr|
       pr.head.ref.start_with?(branch_name_prefix)
     end
-    puts "Found #{prs.length} pull requests automated by us"
+    puts "Found #{prs.length} pull request(s) automated by us"
     prs.to_h { |pr| [pr.head.ref, pr] }
   end
 

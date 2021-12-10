@@ -85,4 +85,8 @@ class GithubRepository
   def close_pull_request(number)
     @client.close_pull_request(@repo, number)
   end
+
+  def pull_commits(number)
+    @client.pull_commits(@repo, number)
+  end
 end
