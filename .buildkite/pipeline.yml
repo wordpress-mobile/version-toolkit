@@ -1,0 +1,12 @@
+steps:
+  #################
+  # Lint
+  #################
+  - label: "🧹 Lint"
+    command: |
+      bundle install
+      echo "--- :rubocop: Run Rubocop"
+      bundle exec rake rubocop
+    plugins:
+      - docker#v3.8.0:
+          image: "ruby:2.7.4"
