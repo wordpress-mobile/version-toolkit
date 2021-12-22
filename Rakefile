@@ -2,8 +2,9 @@
 
 require 'rubocop/rake_task'
 
-task :run do
-  ruby 'src/main.rb'
+task :sync do
+  ENV['RUBYOPT'] = '-W0'
+  ruby 'bin/sync.rb'
 end
 
 RuboCop::RakeTask.new
