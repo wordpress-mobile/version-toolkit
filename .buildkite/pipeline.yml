@@ -7,6 +7,16 @@ steps:
       bundle install
       echo "--- :rubocop: Run Rubocop"
       bundle exec rake rubocop
+    if: build.source != "schedule"
+    plugins:
+      - docker#v3.8.0:
+          image: "ruby:2.7.4"
+
+  - label: "Sync"
+    command: |
+      bundle install
+      bundle exec rake sync
+    if: build.source == "schedule"
     plugins:
       - docker#v3.8.0:
           image: "ruby:2.7.4"
