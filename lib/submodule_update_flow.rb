@@ -40,7 +40,7 @@ class SubmoduleUpdateFlow
   def prs_to_close
     candidate_prs_to_close.filter do |_, pr|
       has_other_commits = @client_repo.pull_commits(pr.number).any? do |commit|
-        commit.author.login != 'wpversionupdatebot'
+        commit.author.login != 'wpmobilebot'
       end
       puts "PR ##{pr.number} has commits by other developers, skipping.." if has_other_commits
       !has_other_commits
