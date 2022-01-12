@@ -20,3 +20,8 @@ steps:
     plugins:
       - docker#v3.8.0:
           image: "ruby:2.7.4"
+          propagate-environment: true
+          environment:
+            # DO NOT MANUALLY SET THIS VALUE!
+            # It is passed from the Buildkite agent to the Docker container
+            - "VERSION_TOOLKIT_GITHUB_TOKEN"
