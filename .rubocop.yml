@@ -1,0 +1,5 @@
+AllCops:
+  NewCops: enable
+
+Metrics/ClassLength:
+  Max: 300
