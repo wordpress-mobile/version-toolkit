@@ -25,7 +25,10 @@ class SubmoduleUpdateFlow
   def close_outdated_pull_requests
     puts "Closing #{prs_to_close.length} pull request(s) that no longer has an associated submodule pull request.."
 
-    prs_to_close.each { |_, pr| @client_repo.close_pull_request(pr.number) }
+    prs_to_close.each do |_, pr|
+      @client_repo.close_pull_request(pr.number)
+      @client_repo.delete_branch(pr.head.ref)
+    end
   end
 
   private
