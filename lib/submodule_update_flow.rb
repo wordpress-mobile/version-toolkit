@@ -75,7 +75,7 @@ class SubmoduleUpdateFlow
     prs.each do |branch_name, submodule_pr|
       @client_repo.create_pull_request(branch_name,
                                        submodule_pr.title,
-                                       new_pull_request_body(submodule_pr.html_url))
+                                       new_pull_request_body(submodule_pr.html_url, submodule_pr.user.login))
     end
   end
 
@@ -125,11 +125,11 @@ class SubmoduleUpdateFlow
     "#{GLOBAL_BRANCH_NAME_PREFIX}/#{@submodule_path}"
   end
 
-  def new_pull_request_body(submodule_pr_url)
+  def new_pull_request_body(submodule_pr_url, submodule_pr_author)
     %(
 ## Related PRs
 
-* #{submodule_pr_url}
+* #{submodule_pr_url} by @#{submodule_pr_author}
 
 ## Description
 
