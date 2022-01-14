@@ -1,6 +1,6 @@
 [
   {
-    "client_repo": "oguzkocer/version-test-bin",
+    "client_repo": "wordpress-mobile/gutenberg-mobile",
     "submodule_repo": "wordpress/gutenberg",
     "submodule_path": "gutenberg",
     "filter_label": "Mobile App - Automation"
