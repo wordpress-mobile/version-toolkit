@@ -89,4 +89,8 @@ class GithubRepository
   def pull_commits(number)
     @client.pull_commits(@repo, number)
   end
+
+  def delete_branch(branch)
+    @client.delete_branch(@repo, branch)
+  end
 end
