@@ -46,7 +46,11 @@ class SubmoduleUpdateFlow
         commit.author.login != 'wpmobilebot'
       end
       puts "PR ##{pr.number} has commits by other developers, skipping.." if has_other_commits
-      !has_other_commits
+
+      isAssigned = !pr.assignees.empty?
+      puts "PR ##{pr.number} is assigned to #{pr.assignees.map(&:login)}, skipping.." if isAssigned
+
+      !has_other_commits && !isAssigned
     end
   end
 
