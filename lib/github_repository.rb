@@ -93,4 +93,8 @@ class GithubRepository
   def delete_branch(branch)
     @client.delete_branch(@repo, branch)
   end
+
+  def add_comment(number, comment)
+    @client.add_comment(@repo, number, comment)
+  end
 end
