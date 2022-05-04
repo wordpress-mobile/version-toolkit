@@ -15,3 +15,6 @@ yard-doc/
 
 # Build Products
 *.gem
+
+# ripgrep ignore file
+.rgignore
